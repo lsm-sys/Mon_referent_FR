@@ -1,8 +1,9 @@
+import ArticleForm from "@/app/components/ArticleForm";
+
 export default function Home() {
   return (
-    <main>
-      <h1>Mon referent FR</h1>
-      <p>Traitement pour les reseaux sociaux</p>
+    <main className="px-4 py-10 sm:px-6 lg:px-8">
+      <ArticleForm />
     </main>
   );
 }
