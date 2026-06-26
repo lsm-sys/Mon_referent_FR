@@ -1,5 +1,56 @@
 @import "tailwindcss";
 
+:root {
+  --french-blue: #002395;
+  --french-blue-light: #1e40af;
+  --french-blue-soft: #3b82f6;
+  --french-red: #ed2939;
+  --french-white: #ffffff;
+}
+
 body {
-  @apply min-h-screen bg-slate-50 text-slate-900 antialiased;
+  @apply min-h-screen text-slate-900 antialiased;
+  background-color: var(--french-blue);
+  background-image:
+    linear-gradient(
+      165deg,
+      #001a70 0%,
+      var(--french-blue) 35%,
+      var(--french-blue-light) 70%,
+      #2563eb 100%
+    );
+  background-attachment: fixed;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 15% 20%, rgb(255 255 255 / 8%) 0%, transparent 45%),
+    radial-gradient(circle at 85% 80%, rgb(59 130 246 / 25%) 0%, transparent 50%);
+}
+
+.french-tricolor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  z-index: 50;
+}
+
+.french-tricolor span:nth-child(1) {
+  background: var(--french-blue);
+}
+
+.french-tricolor span:nth-child(2) {
+  background: var(--french-white);
+}
+
+.french-tricolor span:nth-child(3) {
+  background: var(--french-red);
 }

@@ -44,16 +44,16 @@ export default function ArticleForm() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
       <header className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+        <h1 className="text-3xl font-bold tracking-tight text-white drop-shadow-sm">
           Mon referent FR
         </h1>
-        <p className="text-slate-600">
+        <p className="text-blue-100">
           Traitement pour les reseaux sociaux — article francophone vers contenu
           social
         </p>
       </header>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-white/20 bg-white/95 p-6 shadow-lg backdrop-blur-sm">
         <label htmlFor="article-url" className="mb-2 block text-sm font-medium text-slate-700">
           URL de l&apos;article en francais
         </label>
@@ -63,7 +63,7 @@ export default function ArticleForm() {
           value={url}
           onChange={(event) => setUrl(event.target.value)}
           placeholder="https://exemple.fr/article"
-          className="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          className="w-full rounded-xl border border-blue-200 px-4 py-3 text-slate-900 outline-none transition focus:border-[#002395] focus:ring-2 focus:ring-blue-200"
         />
       </section>
 
@@ -77,7 +77,7 @@ export default function ArticleForm() {
               type="button"
               onClick={() => handleGenerate(action.id)}
               disabled={status === "loading"}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-4 text-left shadow-sm transition hover:border-blue-300 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-xl border border-blue-100 bg-white/95 px-4 py-4 text-left shadow-md backdrop-blur-sm transition hover:border-[#002395] hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <span className="block font-semibold text-slate-900">
                 {isLoading ? "Generation..." : action.label}
@@ -90,11 +90,11 @@ export default function ArticleForm() {
         })}
       </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-white/20 bg-white/95 p-6 shadow-lg backdrop-blur-sm">
         <div className="mb-3 flex items-center justify-between gap-4">
-          <h2 className="text-lg font-semibold text-slate-900">Resultat</h2>
+          <h2 className="text-lg font-semibold text-[#002395]">Resultat</h2>
           {status === "loading" && (
-            <span className="text-sm text-blue-600">Generation en cours...</span>
+            <span className="text-sm font-medium text-[#002395]">Generation en cours...</span>
           )}
         </div>
 
@@ -112,7 +112,7 @@ export default function ArticleForm() {
         )}
 
         {(status === "loading" || status === "success") && (
-          <pre className="min-h-40 whitespace-pre-wrap rounded-xl bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-800">
+          <pre className="min-h-40 whitespace-pre-wrap rounded-xl border border-blue-100 bg-blue-50/80 px-4 py-3 text-sm leading-relaxed text-slate-800">
             {status === "loading"
               ? "Chargement et analyse du HTML de l'article..."
               : result}

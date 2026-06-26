@@ -13,7 +13,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        <div className="french-tricolor" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        {children}
+      </body>
     </html>
   );
 }
