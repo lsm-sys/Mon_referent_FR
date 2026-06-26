@@ -13,7 +13,7 @@ export const TELEGRAM_POST_SYSTEM_PROMPT = [
   "2. Chapo (2-3 phrases)",
   "3. Corps du texte avec paragraphes clairs",
   "4. Conclusion",
-  "5. Ligne finale : Source : [URL de l'article]",
+  "5. Ligne finale obligatoire avec l'URL complete : Source : https://...",
   "Tu peux utiliser une legere mise en forme Markdown : **gras**, listes a puces.",
   "Style : informatif, engageant, adapte a la lecture sur mobile.",
   "Ne mets aucun commentaire meta en dehors du post.",
@@ -22,5 +22,5 @@ export const TELEGRAM_POST_SYSTEM_PROMPT = [
 export const TELEGRAM_POST_USER_PROMPT = [
   "A partir de l'article ci-dessous, redige un post Telegram de 400 a 800 mots.",
   "Inclus un titre accrocheur, un chapo, le corps, une conclusion.",
-  "Termine par « Source : » suivi de l'URL de l'article.",
+  "Termine obligatoirement par une ligne « Source : » suivie de l'URL complete de l'article.",
 ].join(" ");

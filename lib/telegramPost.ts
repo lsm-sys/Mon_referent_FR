@@ -7,8 +7,7 @@ export type ParsedTelegramPost = {
   content: string;
   wordCount: number;
   wordCountNote: string | null;
-  hasSourceLink: boolean;
-  sourceAppended: boolean;
+  sourceUrl: string;
 };
 
 function countWords(text: string): number {
@@ -25,43 +24,49 @@ function getWordCountNote(wordCount: number): string | null {
   return null;
 }
 
-function hasSourceReference(content: string, sourceUrl: string): boolean {
-  const lower = content.toLowerCase();
-  const urlLower = sourceUrl.toLowerCase();
-
-  return (
-    lower.includes(urlLower) ||
-    /source\s*:/i.test(content)
-  );
+export function buildSourceLine(sourceUrl: string): string {
+  return `Source : ${sourceUrl}`;
 }
 
-function ensureSourceLine(content: string, sourceUrl: string): {
-  content: string;
-  appended: boolean;
-} {
-  if (hasSourceReference(content, sourceUrl)) {
-    return { content: content.trim(), appended: false };
+function stripExistingSourceBlock(content: string, sourceUrl: string): string {
+  let cleaned = content.trim();
+
+  cleaned = cleaned.replace(/\n*Source\s*:\s*[^\n]*/gi, "").trim();
+  cleaned = cleaned.replace(
+    new RegExp(`\\n*${escapeRegex(sourceUrl)}\\s*$`, "i"),
+    "",
+  ).trim();
+
+  return cleaned;
+}
+
+function escapeRegex(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export function appendSourceLink(content: string, sourceUrl: string): string {
+  const body = stripExistingSourceBlock(content, sourceUrl);
+  const sourceLine = buildSourceLine(sourceUrl);
+
+  if (!body) {
+    return sourceLine;
   }
 
-  return {
-    content: `${content.trim()}\n\nSource : ${sourceUrl}`,
-    appended: true,
-  };
+  return `${body}\n\n${sourceLine}`;
 }
 
 export function parseTelegramPostResponse(
   raw: string,
   sourceUrl: string,
 ): ParsedTelegramPost {
-  const { content, appended } = ensureSourceLine(raw, sourceUrl);
+  const content = appendSourceLink(raw, sourceUrl);
   const wordCount = countWords(content);
 
   return {
     content,
     wordCount,
     wordCountNote: getWordCountNote(wordCount),
-    hasSourceLink: hasSourceReference(content, sourceUrl),
-    sourceAppended: appended,
+    sourceUrl,
   };
 }
 
@@ -70,15 +75,7 @@ export function formatTelegramPostOutput(post: ParsedTelegramPost): string {
     ? `Post Telegram (${post.wordCountNote})`
     : `Post Telegram (${post.wordCount} mots)`;
 
-  const notes: string[] = [header, post.content];
-
-  if (post.sourceAppended) {
-    notes.push(
-      "[Note : la ligne Source a ete ajoutee automatiquement.]",
-    );
-  }
-
-  return notes.join("\n\n");
+  return `${header}\n\n${post.content}`;
 }
 
 export function validateTelegramPost(post: ParsedTelegramPost): string | null {
@@ -86,8 +83,12 @@ export function validateTelegramPost(post: ParsedTelegramPost): string | null {
     return "Le post Telegram est vide.";
   }
 
-  if (!post.hasSourceLink) {
-    return "Le post Telegram doit contenir une reference a la source.";
+  if (!post.content.includes(post.sourceUrl)) {
+    return "Le post Telegram doit contenir le lien vers la source.";
+  }
+
+  if (!post.content.trimEnd().endsWith(post.sourceUrl)) {
+    return "Le lien source doit apparaitre a la fin du post.";
   }
 
   if (post.wordCount < 200) {
