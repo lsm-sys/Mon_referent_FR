@@ -64,3 +64,26 @@ export type IllustrationResponse = {
   result: string;
   truncated?: boolean;
 };
+
+export type ResultTabId = ActionType | "illustration";
+
+export type TabSuccessResult = {
+  ok: true;
+  result: string;
+  truncated: boolean;
+  imageDataUrl?: string;
+};
+
+export type TabErrorResult = {
+  ok: false;
+  code: AppErrorCode;
+};
+
+export type TabResult = TabSuccessResult | TabErrorResult;
+
+export type GenerateAllResponse = {
+  url: string;
+  article: ParsedArticle;
+  results: Record<ResultTabId, TabResult>;
+  truncated: boolean;
+};
